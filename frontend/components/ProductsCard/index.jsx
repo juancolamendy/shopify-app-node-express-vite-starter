@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+
 import {
   Card,
   Heading,
@@ -8,6 +9,7 @@ import {
   Button,
 } from "@shopify/polaris";
 import { Toast, useAppBridge } from "@shopify/app-bridge-react";
+
 import { gql, useMutation } from "@apollo/client";
 
 import { authFetch } from "../../utils";

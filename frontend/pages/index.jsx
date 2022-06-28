@@ -13,7 +13,7 @@ import trophyImgUrl from "../assets/home-trophy.png";
 
 import { ProductsCard } from "../components";
 
-export default function HomePage() {
+const HomePage = () => {
   return (
     <Page fullWidth>
       <Layout>
@@ -82,3 +82,5 @@ export default function HomePage() {
     </Page>
   );
 }
+
+export default HomePage;
