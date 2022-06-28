@@ -1,0 +1,45 @@
+{
+  "name": "shopify-app-node",
+  "private": true,
+  "scripts": {
+    "build": "npm run build:client",
+    "build:client": "vite build --outDir dist/client",
+    "debug": "node --inspect-brk backend/index.js",
+    "dev": "cross-env NODE_ENV=development nodemon backend/index.js --watch ./backend",
+    "preserve": "npm run build",
+    "serve": "cross-env NODE_ENV=production node backend/index.js",
+    "start": "npm run serve",
+    "test": "vitest --reporter=verbose"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=16.13.0"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.5.10",
+    "@shopify/app-bridge": "^3.1.0",
+    "@shopify/app-bridge-react": "^3.1.0",
+    "@shopify/app-bridge-utils": "^3.1.0",
+    "@shopify/polaris": "^9.14.1",
+    "@shopify/shopify-api": "^3.1.0",
+    "@vitejs/plugin-react": "1.3.2",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.6",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.0",
+    "express": "^4.18.1",
+    "graphql": "^16.5.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^6.3.0",
+    "serve-static": "^1.14.1",
+    "vite": "^2.9.8"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16",
+    "prettier": "^2.6.2",
+    "pretty-quick": "^3.1.3",
+    "supertest": "^6.2.3",
+    "vitest": "^0.10.5"
+  }
+}
