@@ -12,7 +12,7 @@ import { Toast, useAppBridge } from "@shopify/app-bridge-react";
 
 import { gql, useMutation } from "@apollo/client";
 
-import { authFetch } from "../../utils";
+import { authFetch } from "../../utils/apis";
 
 const PRODUCTS_QUERY = gql`
   mutation populateProduct($input: ProductInput!) {

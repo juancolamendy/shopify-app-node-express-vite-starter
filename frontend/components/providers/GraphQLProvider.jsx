@@ -7,7 +7,7 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 
-import { authFetch } from "../../utils";
+import { authFetch } from "../../utils/apis";
 
 export function GraphQLProvider({ children }) {
   const app = useAppBridge();
