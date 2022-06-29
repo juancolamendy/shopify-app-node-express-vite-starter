@@ -10,22 +10,14 @@ import {
 } from "@shopify/polaris";
 import { Toast } from "@shopify/app-bridge-react";
 
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 
 import { useAppQuery } from '../../hooks';
 
-const PRODUCTS_QUERY = gql`
-  mutation populateProduct($input: ProductInput!) {
-    productCreate(input: $input) {
-      product {
-        title
-      }
-    }
-  }
-`;
+import { POPULATE_PRODUCT } from '../../graphql';
 
 export default function ProductsCard() {
-  const [populateProduct, { loading }] = useMutation(PRODUCTS_QUERY);
+  const [populateProduct, { loading }] = useMutation(POPULATE_PRODUCT);
   const [productCount, setProductCount] = useState(0);
   const [hasResults, setHasResults] = useState(false);
 
