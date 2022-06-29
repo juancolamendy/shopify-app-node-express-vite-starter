@@ -12,6 +12,8 @@ import { Toast } from "@shopify/app-bridge-react";
 
 import { useMutation } from "@apollo/client";
 
+import constants from '../../utils/constants';
+
 import { useAppQuery } from '../../hooks';
 
 import { POPULATE_PRODUCT } from '../../graphql';
@@ -21,7 +23,7 @@ export default function ProductsCard() {
   const [productCount, setProductCount] = useState(0);
   const [hasResults, setHasResults] = useState(false);
 
-  const {loading: countLoading, error, data, refetch} = useAppQuery({url:'/api/products-count'});
+  const {loading: countLoading, error, data, refetch} = useAppQuery({url: constants.API_PRODUCTS_COUNT});
   // console.log(countLoading, error, data);
 
   const updateProductCount = useCallback(async () => {
