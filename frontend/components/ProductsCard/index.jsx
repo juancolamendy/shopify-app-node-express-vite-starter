@@ -8,11 +8,11 @@ import {
   TextStyle,
   Button,
 } from "@shopify/polaris";
-import { Toast, useAppBridge } from "@shopify/app-bridge-react";
+import { Toast } from "@shopify/app-bridge-react";
 
 import { gql, useMutation } from "@apollo/client";
 
-import { authFetch } from "../../utils/apis";
+import { useAppQuery } from '../../hooks';
 
 const PRODUCTS_QUERY = gql`
   mutation populateProduct($input: ProductInput!) {
@@ -29,18 +29,23 @@ export default function ProductsCard() {
   const [productCount, setProductCount] = useState(0);
   const [hasResults, setHasResults] = useState(false);
 
-  const app = useAppBridge();
-  const fetch = authFetch(app);
+  const {loading: countLoading, error, data, refetch} = useAppQuery({url:'/api/products-count'});
+  // console.log(countLoading, error, data);
+
   const updateProductCount = useCallback(async () => {
-    const { count } = await fetch("/api/products-count").then((res) =>
-      res.json()
-    );
-    setProductCount(count);
+    refetch();
   }, []);
 
   useEffect(() => {
-    updateProductCount();
-  }, [updateProductCount]);
+    refetch();
+  }, []);
+
+  useEffect(() => {
+    if(data) {
+      const { count } = data;
+      setProductCount(count);
+    }
+  }, [data]);
 
   const toastMarkup = hasResults && (
     <Toast

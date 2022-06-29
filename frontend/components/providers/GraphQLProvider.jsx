@@ -1,5 +1,3 @@
-import { useAppBridge } from "@shopify/app-bridge-react";
-
 import {
   ApolloClient,
   ApolloProvider,
@@ -7,17 +5,15 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 
-import { authFetch } from "../../utils/apis";
+import { useAuthFetch } from "../../hooks";
 
 export function GraphQLProvider({ children }) {
-  const app = useAppBridge();
-
   const client = new ApolloClient({
     cache: new InMemoryCache(),
     link: new HttpLink({
       uri: "/api/graphql",
       credentials: "include",
-      fetch: authFetch(app),
+      fetch: useAuthFetch(),
     }),
   });
 
