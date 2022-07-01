@@ -1,4 +1,3 @@
-// @ts-check
 import { resolve } from "path";
 import express from "express";
 import cookieParser from "cookie-parser";
