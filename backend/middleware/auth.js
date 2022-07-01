@@ -1,8 +1,9 @@
 import { Shopify } from "@shopify/shopify-api";
 
 import topLevelAuthRedirect from "../helpers/top-level-auth-redirect.js";
+import ensureBilling from "../helpers/ensure-billing.js";
 
-export default function applyAuthMiddleware(app) {
+export default function applyAuthMiddleware(app, billing) {
   app.get("/api/auth", async (req, res) => {
     if (!req.query.shop) {
       res.status(500);
@@ -73,8 +74,21 @@ export default function applyAuthMiddleware(app) {
         );
       }
 
+      // If billing is required, check if the store needs to be charged right away to minimize the number of redirects.
+      let redirectUrl = `/?shop=${session.shop}&host=${host}`;
+      if (billing.required) {
+        const [hasPayment, confirmationUrl] = await ensureBilling(
+          session,
+          billing
+        );
+
+        if (!hasPayment) {
+          redirectUrl = confirmationUrl;
+        }
+      }      
+
       // Redirect to app with shop parameter upon auth
-      res.redirect(`/?shop=${session.shop}&host=${host}`);
+      res.redirect(redirectUrl);
     } catch (e) {
       switch (true) {
         case e instanceof Shopify.Errors.InvalidOAuthError:

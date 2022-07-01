@@ -1,5 +1,11 @@
 import { Shopify } from "@shopify/shopify-api";
 
+import ensureBilling, {
+  ShopifyBillingError,
+} from "../helpers/ensure-billing.js";
+
+import returnTopLevelRedirection from "../helpers/return-top-level-redirection.js";
+
 const TEST_GRAPHQL_QUERY = `
 {
   shop {
@@ -7,7 +13,7 @@ const TEST_GRAPHQL_QUERY = `
   }
 }`;
 
-export default function verifyRequest(app, { returnHeader = true } = {}) {
+export default function verifyRequest(app, billing, { returnHeader = true } = {}) {
   return async (req, res, next) => {
     const session = await Shopify.Utils.loadCurrentSession(
       req,
@@ -24,12 +30,25 @@ export default function verifyRequest(app, { returnHeader = true } = {}) {
 
     if (session?.isActive()) {
       try {
-        // make a request to make sure oauth has succeeded, retry otherwise
-        const client = new Shopify.Clients.Graphql(
-          session.shop,
-          session.accessToken
-        );
-        await client.query({ data: TEST_GRAPHQL_QUERY });
+        if (billing.required) {
+          // The request to check billing status serves to validate that the access token is still valid.
+          const [hasPayment, confirmationUrl] = await ensureBilling(
+            session,
+            billing
+          );
+
+          if (!hasPayment) {
+            returnTopLevelRedirection(req, res, confirmationUrl);
+            return;
+          }
+        } else {
+          // make a request to make sure oauth has succeeded, retry otherwise
+          const client = new Shopify.Clients.Graphql(
+            session.shop,
+            session.accessToken
+          );
+          await client.query({ data: TEST_GRAPHQL_QUERY });
+        }        
         return next();
       } catch (e) {
         if (

@@ -7,6 +7,8 @@ import "dotenv/config";
 import applyAuthMiddleware from "./middleware/auth.js";
 import verifyRequest from "./middleware/verify-request.js";
 
+import { BillingInterval } from "./helpers/ensure-billing.js";
+
 const USE_ONLINE_TOKENS = true;
 const TOP_LEVEL_OAUTH_COOKIE = "shopify_top_level_oauth";
 
@@ -35,6 +37,16 @@ Shopify.Webhooks.Registry.addHandler("APP_UNINSTALLED", {
   },
 });
 
+// Billing
+const billingSettings = {
+  required: true,
+  // This is an example configuration that would do a one-time charge for $5 (only USD is currently supported)
+  chargeName: "Starter App",
+  amount: 5.0,
+  currencyCode: "USD",
+  interval: BillingInterval.OneTime,
+};
+
 // export for test use only
 export async function createServer(
   root = process.cwd(),
@@ -47,7 +59,7 @@ export async function createServer(
 
   app.use(cookieParser(Shopify.Context.API_SECRET_KEY));
 
-  applyAuthMiddleware(app);
+  applyAuthMiddleware(app, billingSettings);
 
   app.post("/api/webhooks", async (req, res) => {
     try {
@@ -62,7 +74,7 @@ export async function createServer(
   });
 
   // All endpoints after this point will require an active session
-  app.use("/api/*", verifyRequest(app));
+  app.use("/api/*", verifyRequest(app, billingSettings));
 
   app.get("/api/products-count", async (req, res) => {
     const session = await Shopify.Utils.loadCurrentSession(req, res, true);
