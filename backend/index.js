@@ -7,7 +7,7 @@ import "dotenv/config";
 import applyAuthMiddleware from "./middleware/auth.js";
 import verifyRequest from "./middleware/verify-request.js";
 
-import { BillingInterval } from "./helpers/ensure-billing.js";
+// import { BillingInterval } from "./helpers/ensure-billing.js";
 
 const USE_ONLINE_TOKENS = true;
 const TOP_LEVEL_OAUTH_COOKIE = "shopify_top_level_oauth";
@@ -39,12 +39,13 @@ Shopify.Webhooks.Registry.addHandler("APP_UNINSTALLED", {
 
 // Billing
 const billingSettings = {
-  required: true,
+  required: false,
   // This is an example configuration that would do a one-time charge for $5 (only USD is currently supported)
-  chargeName: "Starter App",
-  amount: 5.0,
-  currencyCode: "USD",
-  interval: BillingInterval.OneTime,
+  //required: true,
+  //chargeName: "Starter App",
+  //amount: 5.0,
+  //currencyCode: "USD",
+  //interval: BillingInterval.OneTime,
 };
 
 // export for test use only

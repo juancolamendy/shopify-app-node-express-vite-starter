@@ -26,7 +26,7 @@ export default async function ensureBilling(
   isProdOverride = process.env.NODE_ENV === "production"
 ) {
   if (!Object.values(BillingInterval).includes(interval)) {
-    throw `Unrecognized billing interval '${interval}'`;
+    throw new Error(`Unrecognized billing interval '${interval}'`);
   }
 
   isProd = isProdOverride;

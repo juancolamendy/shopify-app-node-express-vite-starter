@@ -1,8 +1,6 @@
 import { Shopify } from "@shopify/shopify-api";
 
-import ensureBilling, {
-  ShopifyBillingError,
-} from "../helpers/ensure-billing.js";
+import ensureBilling from "../helpers/ensure-billing.js";
 
 import returnTopLevelRedirection from "../helpers/return-top-level-redirection.js";
 

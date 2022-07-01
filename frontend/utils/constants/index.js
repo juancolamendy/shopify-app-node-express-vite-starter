@@ -1,6 +1,6 @@
 const API_BASE = "/api";
 
-export default {
+const constants = {
   // Client routes
   RTE_INDEX: '/',
 
@@ -19,3 +19,5 @@ export default {
   HTTP_STATUS_OK: 200,
   HTTP_STATUS_UNAUTHORIZED: 403,  
 }
+
+export default constants;
