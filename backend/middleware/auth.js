@@ -2,8 +2,9 @@ import { Shopify } from "@shopify/shopify-api";
 
 import topLevelAuthRedirect from "../helpers/top-level-auth-redirect.js";
 import ensureBilling from "../helpers/ensure-billing.js";
+import ensureScriptTag from '../helpers/ensure-script-tag.js';
 
-export default function applyAuthMiddleware(app, billing) {
+export default function applyAuthMiddleware(app, billing, scriptTagSettings) {
   app.get("/api/auth", async (req, res) => {
     if (!req.query.shop) {
       res.status(500);
@@ -72,6 +73,11 @@ export default function applyAuthMiddleware(app, billing) {
         console.log(
           `Failed to register APP_UNINSTALLED webhook: ${response.result}`
         );
+      }
+
+      // Ensure script tags
+      if(scriptTagSettings.required) {
+        await ensureScriptTag(session, scriptTagSettings);
       }
 
       // If billing is required, check if the store needs to be charged right away to minimize the number of redirects.

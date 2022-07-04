@@ -48,6 +48,14 @@ const billingSettings = {
   //interval: BillingInterval.OneTime,
 };
 
+// ScriptTag
+const scriptTagSettings = {
+  required: true,
+  purge: false,
+  src: 'https://storage.googleapis.com/jco-public-bucket/index.js',
+  scope: 'ALL'
+};
+
 // export for test use only
 export async function createServer(
   root = process.cwd(),
@@ -60,7 +68,7 @@ export async function createServer(
 
   app.use(cookieParser(Shopify.Context.API_SECRET_KEY));
 
-  applyAuthMiddleware(app, billingSettings);
+  applyAuthMiddleware(app, billingSettings, scriptTagSettings);
 
   app.post("/api/webhooks", async (req, res) => {
     try {
