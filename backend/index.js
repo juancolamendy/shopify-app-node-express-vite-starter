@@ -7,6 +7,8 @@ import "dotenv/config";
 import applyAuthMiddleware from "./middleware/auth.js";
 import verifyRequest from "./middleware/verify-request.js";
 
+import printEnvVars from './helpers/print-env.js';
+
 // import { BillingInterval } from "./helpers/ensure-billing.js";
 
 const USE_ONLINE_TOKENS = true;
@@ -14,6 +16,9 @@ const TOP_LEVEL_OAUTH_COOKIE = "shopify_top_level_oauth";
 
 const PORT = parseInt(process.env.PORT || "3000", 10);
 const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
+
+// print envs
+printEnvVars();
 
 // Init Shopify context
 Shopify.Context.initialize({
@@ -52,8 +57,8 @@ const billingSettings = {
 const scriptTagSettings = {
   required: true,
   purge: false,
-  src: 'https://storage.googleapis.com/jco-public-bucket/index.js',
-  scope: 'ALL'
+  src: process.env.SCRIPT_TAG_URL,
+  scope: process.env.SCRIPT_TAG_SCOPE
 };
 
 // export for test use only
